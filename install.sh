@@ -24,7 +24,7 @@ PY
 
 need curl
 
-[ -n "${MATOS_PAT:-}" ] || die "MATOS_PAT is required"
+[ -n "${MATOS_GHCR_PAT:-}" ] || die "MATOS_GHCR_PAT is required"
 
 GITHUB_API="https://api.github.com"
 GITHUB_API_VERSION="2022-11-28"
@@ -57,7 +57,7 @@ else
     detect_python
     tag=$(curl -fsSL --retry 3 --connect-timeout 15 \
         -H 'Accept: application/vnd.github+json' \
-        -H "Authorization: Bearer ${MATOS_PAT}" \
+        -H "Authorization: Bearer ${MATOS_GHCR_PAT}" \
         -H "X-GitHub-Api-Version: ${GITHUB_API_VERSION}" \
         "${GITHUB_API%/}/repos/${MATOS_INSTALLER_REPO}/releases/latest" \
         | "$PYTHON_BIN" -c '
@@ -71,7 +71,7 @@ fi
 
 curl -fsSL --retry 3 --connect-timeout 15 \
     -H 'Accept: application/vnd.github.raw+json' \
-    -H "Authorization: Bearer ${MATOS_PAT}" \
+    -H "Authorization: Bearer ${MATOS_GHCR_PAT}" \
     -H "X-GitHub-Api-Version: ${GITHUB_API_VERSION}" \
     --get \
     --data-urlencode "ref=${tag}" \
