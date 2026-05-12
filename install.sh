@@ -69,12 +69,14 @@ if not isinstance(tag, str) or not tag:
 print(tag)') || die "Failed to resolve latest release from ${MATOS_INSTALLER_REPO}"
 fi
 
+ref="${MATOS_INSTALLER_REF:-$tag}"
+
 curl -fsSL --retry 3 --connect-timeout 15 \
     -H 'Accept: application/vnd.github.raw+json' \
     -H "Authorization: Bearer ${MATOS_GHCR_PAT}" \
     -H "X-GitHub-Api-Version: ${GITHUB_API_VERSION}" \
     --get \
-    --data-urlencode "ref=${tag}" \
+    --data-urlencode "ref=${ref}" \
     "${GITHUB_API%/}/repos/${MATOS_INSTALLER_REPO}/contents/${MATOS_INSTALLER_PATH}" \
     | MATOS_VERSION="${MATOS_VERSION:-${tag#v}}" \
       bash -s -- "$@"
